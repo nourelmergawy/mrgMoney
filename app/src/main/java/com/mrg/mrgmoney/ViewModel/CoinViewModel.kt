@@ -1,26 +1,32 @@
 package com.mrg.mrgmoney.ViewModel
 
+import android.app.Application
+import androidx.databinding.Bindable
 import androidx.lifecycle.*
 import com.mrg.mrgmoney.DataBase.Coin
+import com.mrg.mrgmoney.DataBase.CoinBase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class CoinViewModel(private val repository: CoinRepository) : ViewModel() {
-     val readAllDAta: LiveData<List<Coin>> = repository.readAllDAta
+class CoinViewModel (application: Application) : AndroidViewModel(application) {
+
+   // val amount = List<String>()
+    private var coinRepository = CoinRepository(application)
+    private var coin: LiveData<List<Coin>>? = coinRepository.getAllCoin()
 
     fun addCoin(coin: Coin) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.addCoin(coin)
+            coinRepository.addCoin(coin)
         }
     }
-}
-
-class CoinViewModelFactory(private val repository: CoinRepository) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(CoinViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return CoinViewModel(repository) as T
+    fun deleteCoin(coin: Coin) {
+        viewModelScope.launch(Dispatchers.IO) {
+            coinRepository.deleteCoin(coin)
         }
-        throw IllegalArgumentException("Unknown ViewModel class")
+    }
+    fun getAllCoin() {
+        viewModelScope.launch(Dispatchers.IO) {
+            coinRepository.getAllCoin()
+        }
     }
 }
