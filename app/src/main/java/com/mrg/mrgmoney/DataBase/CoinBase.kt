@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 
-@Database(entities = [Coin::class], version = 1)
+@Database(entities = [Coin::class], version = 2)
 abstract class CoinBase : RoomDatabase() {
     abstract fun coinDao(): CoinDao
 
@@ -24,6 +24,7 @@ abstract class CoinBase : RoomDatabase() {
                     CoinBase::class.java,
                     "coin_database"
                 )
+                    .fallbackToDestructiveMigration()
                 .build()
                 INSTANCE = instance
                 return instance

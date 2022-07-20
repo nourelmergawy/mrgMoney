@@ -3,32 +3,25 @@ package com.mrg.mrgmoney.ViewModel
 import android.app.Application
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.mrg.mrgmoney.DataBase.Coin
 import com.mrg.mrgmoney.DataBase.CoinBase
 import com.mrg.mrgmoney.DataBase.CoinDao
 
-class CoinRepository(application: Application) {
+class CoinRepository(private val coinDao: CoinDao) {
 
-    private val coinDao: CoinDao?
-    private var coin: LiveData<List<Coin>>? = null
+    val allCoins: LiveData<List<Coin>> = coinDao.getAll()
 
-    init {
-        val coinBase = CoinBase.getCoinBase(application)
-        coinDao = coinBase?.coinDao()
-        coin = coinDao?.getAll()
-    }
-
-
-    @Suppress("RedundantSuspendModifier")
-   @WorkerThread
-    fun addCoin(coin: Coin){
+    suspend fun addCoin(coin: Coin){
         coinDao?.insertAll(coin)
     }
-     fun deleteCoin(coin: Coin){
+    suspend fun deleteCoin(coin: Coin){
         coinDao?.delete(coin)
     }
-     fun getAllCoin(): LiveData<List<Coin>>? {
-        return coin
+
+    suspend fun getTotal(){
+    coinDao?.getTotal()
     }
+
 
 }

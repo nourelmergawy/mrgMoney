@@ -1,6 +1,7 @@
 package com.mrg.mrgmoney.DataBase
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 
 @Dao
@@ -19,4 +20,8 @@ interface CoinDao {
 
     @Query("DELETE FROM coin")
     suspend fun deleteAll()
+    @Query("SELECT * FROM coin ORDER BY date DESC LIMIT 1 ")
+    suspend fun getTotal()
+
+
 }

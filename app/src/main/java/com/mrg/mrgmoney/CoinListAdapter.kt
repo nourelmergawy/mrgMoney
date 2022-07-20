@@ -11,43 +11,39 @@ import com.mrg.mrgmoney.DataBase.Coin
 import com.mrg.mrgmoney.R
 import com.mrg.mrgmoney.ViewModel.CoinViewModel
 
-class CoinListAdapter(private val context: Context?, private val listener: (Coin, Int) -> Unit) :  RecyclerView.Adapter<CoinViewHolder>() {
-    private var coin = listOf<Coin>()
+class CoinListAdapter(private val mList: ArrayList<Coin>) :  RecyclerView.Adapter<CoinListAdapter.CoinViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
-        return CoinViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.recyclerview_item,
-                parent,
-                false
-            )
-        )
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.recyclerview_item, parent, false)
+
+        return CoinViewHolder(view)
     }
 
-    override fun getItemCount(): Int = coin.size
+    override fun getItemCount(): Int = mList.size
 
     override fun onBindViewHolder(holder: CoinViewHolder, position: Int) {
-        if (context != null) {
-            holder.bindItem(context, coin[position], listener)
-        }
+        val ItemsViewModel = mList[position]
+
+        // sets the text to the textview from our itemHolder class
+        holder.amount.text = ItemsViewModel.amount.toString()
     }
 
-    fun setCoins(coin: List<Coin>) {
-        this.coin = coin
+
+    class CoinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val amount: TextView = itemView.findViewById(R.id.amount_item)
+        val date: TextView = itemView.findViewById(R.id.date_item)
+
+    }
+    fun updateList(newList: List<Coin>) {
+        // on below line we are clearing
+        // our notes array list
+        mList.clear()
+        // on below line we are adding a
+        // new list to our all notes list.
+        mList.addAll(newList)
+        // on below line we are calling notify data
+        // change method to notify our adapter.
         notifyDataSetChanged()
     }
 }
-
-class CoinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val amount: TextView = itemView.findViewById(R.id.amount_item)
-    val date: TextView = itemView.findViewById(R.id.date_item)
-    fun bindItem(context: Context, coin: Coin, listener: (Coin, Int) -> Unit) {
-        amount.text = coin.amount.toString()
-        date.text = coin.amount.toString()
-        itemView.setOnClickListener {
-            listener(coin, layoutPosition)
-        }
-    }
-
-
-    }
