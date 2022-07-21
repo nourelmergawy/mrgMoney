@@ -38,9 +38,9 @@ class CoinViewModel (application: Application) : AndroidViewModel(application) {
 //    fun getAllCoinObservers(): MutableLiveData<List<Coin>> {
 //        return allCoins
 //    }
-    fun getTotal(){
-    viewModelScope.launch(Dispatchers.IO) {
-        coinRepository.getTotal()
-    }
-    }
+//    fun getTotal(coin: Coin){
+//        viewModelScope.launch(Dispatchers.IO) {
+//            coinRepository.getTotal()
+//        }
+//    }
 }

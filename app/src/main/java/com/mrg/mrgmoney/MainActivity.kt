@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var total : TextView
     private lateinit var coinViewModel: CoinViewModel
     private lateinit var coinListAdapter: CoinListAdapter
-    //lateinit var list : LiveData<List<Coin>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,9 +56,8 @@ class MainActivity : AppCompatActivity() {
         coinViewModel.allCoins.observe(this, Observer { list ->
             list?.let {
                 gainBtn.setOnClickListener(View.OnClickListener {
-                    var amount : String = addMoney.text.toString()
-                    insertDataToDataBase(amount.toInt(),"gain",)
-
+                    var amount = addMoney.text.toString().toInt()
+                    insertDataToDataBase(amount,"gain")
                 })
                 adapter.updateList(it)
             }
@@ -69,24 +67,35 @@ class MainActivity : AppCompatActivity() {
         //val totalMoney: String = addMoney.getText().toString()
         //val totalMoneyInt : Int = Integer.parseInt(totalMoney)
         if(inputCheck(amount)){
-            coinViewModel.addCoin(Coin(0,"fdfd",type,amount,0))
-            Log.d(TAG, "insertDataToDataBase: ${amount}\n${type}")
+
+                //var total = getTotal()?.plus(amount)
+                coinViewModel.addCoin(Coin(0,"20/07/2022",type,amount,getTotal(type,amount)))
+
+                Log.d(TAG, "insertDataToDataBase: ${amount} - ${type} - ${getTotal(type,amount)}")
 
             Toast.makeText(this,"successfully",Toast.LENGTH_SHORT)
         }else{
             Toast.makeText(this,"faild",Toast.LENGTH_SHORT)
 
         }
-
     }
-    private fun getTotal(){
-        coinViewModel.allCoins
+    private fun getTotal(type: String,amount: Int): Int? {
+        var index = coinViewModel.allCoins.value?.lastIndex
+        var total : Int? = coinViewModel.allCoins.value?.get(index!!)?.total
+        if (total != null) {
+            if (type == "gain"){
+                total += amount
+            }else{
+                total -= amount
+            }
+        }else{
+            total = 0
+            getTotal(type,amount)
+        }
+
+          return total
     }
     private fun inputCheck( money : Int): Boolean {
         return !(TextUtils.isEmpty(money.toString()))
     }
-
-
 }
-
-

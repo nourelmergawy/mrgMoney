@@ -20,8 +20,8 @@ interface CoinDao {
 
     @Query("DELETE FROM coin")
     suspend fun deleteAll()
-    @Query("SELECT * FROM coin ORDER BY date DESC LIMIT 1 ")
-    suspend fun getTotal()
+//    @Query("SELECT * FROM coin ORDER BY date DESC LIMIT 1 ")
+//    suspend fun getTotal()
 
 
 }
