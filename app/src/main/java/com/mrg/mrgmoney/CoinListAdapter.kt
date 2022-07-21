@@ -5,13 +5,14 @@ import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mrg.mrgmoney.DataBase.Coin
 import com.mrg.mrgmoney.R
 import com.mrg.mrgmoney.ViewModel.CoinViewModel
 
-class CoinListAdapter(private val mList: ArrayList<Coin>) :  RecyclerView.Adapter<CoinListAdapter.CoinViewHolder>() {
+class CoinListAdapter(private val mList: ArrayList<Coin>,val deleteInterface:DeleteInterface) :  RecyclerView.Adapter<CoinListAdapter.CoinViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -27,12 +28,17 @@ class CoinListAdapter(private val mList: ArrayList<Coin>) :  RecyclerView.Adapte
 
         // sets the text to the textview from our itemHolder class
         holder.amount.text = ItemsViewModel.amount.toString()
+        holder.date.text = ItemsViewModel.date.toString()
+        holder.removeBtn.setOnClickListener {
+            deleteInterface.onDelete(mList.get(position))
+        }
     }
 
 
     class CoinViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val amount: TextView = itemView.findViewById(R.id.amount_item)
         val date: TextView = itemView.findViewById(R.id.date_item)
+        val removeBtn : ImageView = itemView.findViewById(R.id.rmv_btn)
 
     }
     fun updateList(newList: List<Coin>) {
@@ -45,5 +51,8 @@ class CoinListAdapter(private val mList: ArrayList<Coin>) :  RecyclerView.Adapte
         // on below line we are calling notify data
         // change method to notify our adapter.
         notifyDataSetChanged()
+    }
+    interface DeleteInterface{
+        fun onDelete(coin: Coin)
     }
 }

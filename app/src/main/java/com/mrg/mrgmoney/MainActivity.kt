@@ -2,6 +2,7 @@ package com.mrg.mrgmoney
 
 import CoinListAdapter
 import android.content.ContentValues.TAG
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -10,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -18,8 +20,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mrg.mrgmoney.DataBase.Coin
 import com.mrg.mrgmoney.ViewModel.CoinViewModel
+import java.time.LocalDateTime
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() , CoinListAdapter.DeleteInterface {
     lateinit var gainBtn : Button
     lateinit var spendBtn : Button
     lateinit var addMoney : EditText
@@ -27,6 +30,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var coinViewModel: CoinViewModel
     private lateinit var coinListAdapter: CoinListAdapter
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -46,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         //data.addAll(viewModal.allNotes)
 
         // This will pass the ArrayList to our Adapter
-        val adapter = CoinListAdapter(data)
+        val adapter = CoinListAdapter(data,this)
 
         // Setting the Adapter with the recyclerview
         recyclerview.adapter = adapter
@@ -55,6 +59,15 @@ class MainActivity : AppCompatActivity() {
         coinViewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)).get(CoinViewModel::class.java)
         coinViewModel.allCoins.observe(this, Observer { list ->
             list?.let {
+                Log.d(TAG, "getTotal: ${coinViewModel.allCoins.value?.lastIndex}")
+
+                if( coinViewModel.allCoins.value?.lastIndex == -1){
+
+                    coinViewModel.addCoin(Coin(0, "","",0,0))
+                    Log.d(TAG, "getTotal2: ${coinViewModel.allCoins.value?.lastIndex}")
+
+                }
+                total.setText(getTotal("gain",0).toString()!!)
                 gainBtn.setOnClickListener(View.OnClickListener {
                     var amount = addMoney.text.toString().toInt()
                     insertDataToDataBase(amount,"gain")
@@ -63,13 +76,14 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun insertDataToDataBase(amount: Int, type: String) {
         //val totalMoney: String = addMoney.getText().toString()
         //val totalMoneyInt : Int = Integer.parseInt(totalMoney)
         if(inputCheck(amount)){
 
                 //var total = getTotal()?.plus(amount)
-                coinViewModel.addCoin(Coin(0,"20/07/2022",type,amount,getTotal(type,amount)))
+                coinViewModel.addCoin(Coin(0, LocalDateTime.now().toString(),type,amount,getTotal(type,amount)))
 
                 Log.d(TAG, "insertDataToDataBase: ${amount} - ${type} - ${getTotal(type,amount)}")
 
@@ -80,22 +94,32 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun getTotal(type: String,amount: Int): Int? {
-        var index = coinViewModel.allCoins.value?.lastIndex
-        var total : Int? = coinViewModel.allCoins.value?.get(index!!)?.total
-        if (total != null) {
-            if (type == "gain"){
-                total += amount
-            }else{
-                total -= amount
-            }
-        }else{
-            total = 0
-            getTotal(type,amount)
-        }
 
-          return total
+            Log.d(TAG, "getTotal: ${coinViewModel.allCoins.value?.lastIndex}")
+            var index = coinViewModel.allCoins.value?.lastIndex
+            if (total != null) {
+                var total : Int? = coinViewModel.allCoins.value?.get(index!!)?.total
+                if (total != null) {
+                    if (type == "gain"){
+                        total += amount
+                        return total
+                    }else{
+                        total -= amount
+                        return total
+                    }
+                }else{
+                    total = 0
+                    getTotal(type,amount)
+                }
+            }
+
+        return 0
     }
     private fun inputCheck( money : Int): Boolean {
         return !(TextUtils.isEmpty(money.toString()))
+    }
+    override fun onDelete(coin: Coin) {
+        coinViewModel.deleteCoin(coin)
+        Toast.makeText(this,"Coin deleted successfully", Toast.LENGTH_LONG).show()
     }
 }
