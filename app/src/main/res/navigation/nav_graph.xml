@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/graphFragment">
+
+    <fragment
+        android:id="@+id/coinFragment"
+        android:name="com.mrg.mrgmoney.CoinFragment"
+        android:label="fragment_coin"
+        tools:layout="@layout/fragment_coin" >
+        <action
+            android:id="@+id/action_coinFragment_to_graphFragment"
+            app:destination="@id/graphFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/graphFragment"
+        android:name="com.mrg.mrgmoney.GraphFragment"
+        android:label="fragment_graph"
+        tools:layout="@layout/fragment_graph" />
+</navigation>

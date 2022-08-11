@@ -1,7 +1,11 @@
 package com.mrg.mrgmoney.DataBase
 
+import android.content.ContentValues
+import android.os.Build
+import android.util.Log
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.room.*
@@ -22,11 +26,5 @@ interface CoinDao {
 
     @Query("DELETE FROM coin")
     suspend fun deleteAll()
-//
-//    @Query("SELECT total FROM coin LIMIT 1")
-//    suspend fun getTotal() :LiveData<List<Coin>>
-
-
-
 
 }

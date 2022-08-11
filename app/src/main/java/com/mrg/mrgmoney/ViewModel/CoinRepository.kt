@@ -19,9 +19,5 @@ class CoinRepository(private val coinDao: CoinDao) {
         coinDao?.delete(coin)
     }
 
-//    suspend fun getTotal(){
-//    coinDao?.getTotal()
-//    }
-
 
 }

@@ -1,12 +1,22 @@
 package com.mrg.mrgmoney.ViewModel
 
 import android.app.Application
+import android.content.ContentValues
+import android.content.ContentValues.TAG
+import android.content.Context
+import android.icu.text.SimpleDateFormat
+import android.os.Build
+import android.util.Log
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.databinding.Bindable
 import androidx.lifecycle.*
 import com.mrg.mrgmoney.DataBase.Coin
 import com.mrg.mrgmoney.DataBase.CoinBase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.util.*
 
 class CoinViewModel (application: Application) : AndroidViewModel(application) {
 
@@ -30,17 +40,55 @@ class CoinViewModel (application: Application) : AndroidViewModel(application) {
             coinRepository.deleteCoin(coin)
         }
     }
-//    fun getAllCoin() {
-//        viewModelScope.launch(Dispatchers.IO) {
-//            allCoins.postValue(coinRepository.allCoins())
-//        }
-//    }
-//    fun getAllCoinObservers(): MutableLiveData<List<Coin>> {
-//        return allCoins
-//    }
-//    fun getTotal() {
-//        viewModelScope.launch(Dispatchers.IO) {
-//             coinRepository.getTotal()
-//        }
-//    }
+    fun getTotal(type: String, amount: Int): Int? {
+        Log.d(ContentValues.TAG, "getTotal: ${allCoins.value?.lastIndex}")
+        var total : Int? =0
+        if (allCoins.value?.lastIndex == -1 ){
+            return -1
+        }else {
+            var index = allCoins.value?.lastIndex
+            total = allCoins.value?.get(index!!)?.total
+            if (total != null) {
+                if (type == "gain") {
+                    total += amount
+                    return total
+                } else if (type == "spend") {
+                    total -= amount
+                    return total
+                }
+            }
+        }
+        return total
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun insertDataToDataBase(amount: Int, type: String, context: Context) {
+        Log.d(TAG, "insertDataToDataBase: ${amount} - ${type} - ${getTotal(type,amount)}")
+
+        if(amount > 0){
+            if(getTotal(type,amount) == -1 ){
+                if (type == "spend"){
+                    Toast.makeText(context,"spend",Toast.LENGTH_SHORT)
+                    addCoin(Coin(0, getDate(),type,amount,-amount))
+
+                }else{
+                   addCoin(Coin(0, getDate(),type,amount,amount))
+
+                }
+                Log.d(TAG, "insertDataToDataBase: date = ${ LocalDateTime.now()}")
+
+            }else{
+              addCoin(Coin(0, getDate(),type,amount,getTotal(type,amount)))
+            }
+            Toast.makeText(context,"successfully",Toast.LENGTH_SHORT)
+        }else{
+            Toast.makeText(context,"faild",Toast.LENGTH_SHORT)
+
+        }
+    }
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun getDate():String{
+        val simpleDate = SimpleDateFormat("dd/M/ hh:mm a")
+        val currentDate = simpleDate.format(Date())
+        return currentDate
+    }
 }

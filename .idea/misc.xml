@@ -4,8 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/mergo/AndroidStudioProjects/mrgmoney2/app/src/main/res/drawable/ic_remove_background.xml" value="0.239" />
-        <entry key="..\:/Users/mergo/AndroidStudioProjects/mrgmoney2/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/mergo/AndroidStudioProjects/mrgmoney2/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/mergo/AndroidStudioProjects/mrgmoney2/app/src/main/res/layout/fragment_coin.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/mergo/AndroidStudioProjects/mrgmoney2/app/src/main/res/layout/recyclerview_item.xml" value="0.190625" />
+        <entry key="..\:/Users/mergo/AndroidStudioProjects/mrgmoney2/app/src/main/res/menu/bottom_menu.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>
