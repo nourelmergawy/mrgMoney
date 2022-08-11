@@ -3,13 +3,12 @@
     <item
         android:id="@+id/coinFragment"
         android:icon="@drawable/money_bag"
-        android:title="Home"  />
+        android:title="Coin"  />
     <item
         android:id="@+id/graphFragment"
         android:icon="@drawable/graph"
-        android:title="Message" />
+        android:title="Graph" />
     <item
-        android:id="@+id/coinFragment"
         android:icon="@drawable/remove_from_cart"
         android:title="Setting" />
 </menu>
