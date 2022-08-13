@@ -12,7 +12,7 @@ import androidx.room.*
 
 @Dao
 interface CoinDao {
-    @Query("SELECT * FROM coin")
+    @Query("SELECT * FROM coin ORDER BY uid DESC")
     fun getAll():LiveData<List<Coin>>
 
     @Query("SELECT * FROM coin WHERE uid IN (:coinIds)")

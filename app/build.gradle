@@ -98,6 +98,7 @@ dependencies {
     })
     androidTestImplementation "androidx.test.ext:junit:1.4.0"
 
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+//    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:-SNAPSHOT'
 
 }

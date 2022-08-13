@@ -1,7 +1,6 @@
-package com.mrg.mrgmoney
+package com.mrg.mrgmoney.fragments
 
-import CoinListAdapter
-import android.content.ContentValues
+import com.mrg.mrgmoney.adapters.CoinListAdapter
 import android.content.ContentValues.TAG
 import android.os.Build
 import android.os.Bundle
@@ -18,21 +17,19 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.mrg.mrgmoney.DataBase.Coin
 import com.mrg.mrgmoney.ViewModel.CoinViewModel
 import com.mrg.mrgmoney.databinding.FragmentCoinBinding
 
-class CoinFragment : Fragment() ,CoinListAdapter.DeleteInterface {
+class CoinFragment : Fragment() , CoinListAdapter.DeleteInterface {
     private lateinit var binding: FragmentCoinBinding
     private lateinit var gainBtn : Button
     private lateinit var spendBtn : Button
     private lateinit var addMoney : EditText
     private lateinit var tvTotal : TextView
     private lateinit var coinViewModel: CoinViewModel
-    private lateinit var coinListAdapter: CoinListAdapter
     private val data = ArrayList<Coin>()
-    private lateinit var coinFragment :CoinFragment
+    private lateinit var coinFragment : CoinFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +43,7 @@ class CoinFragment : Fragment() ,CoinListAdapter.DeleteInterface {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentCoinBinding.inflate(inflater, container, false)
-        coinFragment =CoinFragment()
+        coinFragment = CoinFragment()
 
         setViews()
         setRecycler()
@@ -59,11 +56,13 @@ class CoinFragment : Fragment() ,CoinListAdapter.DeleteInterface {
         gainBtn.setOnClickListener(View.OnClickListener {
             var amount = addMoney.text.toString().toInt()
             coinViewModel.insertDataToDataBase(amount,"gain",activity?.applicationContext!!)
+            addMoney.setText("")
         })
 
         spendBtn.setOnClickListener(View.OnClickListener {
             var amount = addMoney.text.toString().toInt()
             coinViewModel.insertDataToDataBase(amount,"spend",activity?.applicationContext!!)
+            addMoney.setText("")
         })
 
         coinViewModel.allCoins.observe(viewLifecycleOwner, Observer { list ->

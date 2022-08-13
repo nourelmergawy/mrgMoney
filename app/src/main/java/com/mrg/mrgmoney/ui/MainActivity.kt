@@ -1,4 +1,4 @@
-package com.mrg.mrgmoney
+package com.mrg.mrgmoney.ui
 
 import android.os.Build
 import android.os.Bundle
@@ -7,13 +7,12 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.mrg.mrgmoney.R
 import com.mrg.mrgmoney.ViewModel.CoinViewModel
 import com.mrg.mrgmoney.databinding.ActivityMainBinding
 

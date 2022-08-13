@@ -1,18 +1,15 @@
-import android.app.AlertDialog
-import android.content.Context
+package com.mrg.mrgmoney.adapters
+
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mrg.mrgmoney.DataBase.Coin
 import com.mrg.mrgmoney.R
-import com.mrg.mrgmoney.ViewModel.CoinViewModel
 
-class CoinListAdapter(private val mList: ArrayList<Coin>,val deleteInterface:DeleteInterface) :  RecyclerView.Adapter<CoinListAdapter.CoinViewHolder>() {
+class CoinListAdapter(private val mList: ArrayList<Coin>,val deleteInterface: DeleteInterface) :  RecyclerView.Adapter<CoinListAdapter.CoinViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
         val view = LayoutInflater.from(parent.context)
