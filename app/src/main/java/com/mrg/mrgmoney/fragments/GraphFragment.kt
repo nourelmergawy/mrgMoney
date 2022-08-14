@@ -21,8 +21,9 @@ class GraphFragment : Fragment() {
   private lateinit var binding: FragmentGraphBinding
   private lateinit var coinViewModel: CoinViewModel
 //  private val data = ArrayList<ILineDataSet>()
-  private val chartGain =ArrayList<AASeriesElement >()
-  private val chartSpend =ArrayList<AASeriesElement >()
+  private  val chartGain =  ArrayList<Int>()
+  private  val chartSpend = ArrayList<Int>()
+//  private lateinit var arrayGain :Array<AASeriesElement>()
   private lateinit var aaChartModel : AAChartModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,15 +47,28 @@ class GraphFragment : Fragment() {
 
         coinViewModel.allCoins.observe(viewLifecycleOwner , Observer {
             setData(it)
+//            var arrayGian = intArrayOf(chartGain.to)
             aaChartModel = AAChartModel()
-                .chartType(AAChartType.Funnel)
+                .chartType(AAChartType.Line)
                 .title("Graph")
-                .subtitle("subtitle")
-                .backgroundColor("#4b2b7f")
+                .subtitle("money")
                 .dataLabelsEnabled(true)
                 .series(
-                    arrayOf()
-                )
+                        arrayOf(
+                            AASeriesElement()
+                                .name("gain")
+                                .data(arrayOf(chartGain.toArray(), arrayOf(3, 4)))
+//                            arrayOf(
+//                                AASeriesElement()
+//                                    .data(),
+//                                AASeriesElement()
+//                                    .name("spend")
+//                                    .data(chartSpend.toArray())
+//                            ),
+//                            arrayOf(1,2,3,4,5,6,7,8,9,10)
+                        )
+
+                    )
             //The chart view object calls the instance object of AAChartModel and draws the final graphic
             aaChartView.aa_drawChartWithChartModel(aaChartModel)
         })
@@ -68,19 +82,17 @@ class GraphFragment : Fragment() {
     fun setData(list: List<Coin>){
         for (item in list){
             if (item.type == "gain"){
+
                 chartGain.add(
 //                        LocalDate.parse(item.date).dayOfMonth.toFloat()?: 0F,
-                    AASeriesElement()
-                        .color("#232323")
-                        .data(arrayOf(item.amount?.toInt()!!))
+                    item.amount?.toInt()!!
                 )
             }else if(item.type == "spend"){
                 chartSpend.add(
-                    AASeriesElement()
-                        .color("#222333")
-                        .data(arrayOf(item.amount?.toInt()!!))
+                    item.amount?.toInt()!!
                 )
             }
         }
+
     }
 }
