@@ -1,7 +1,10 @@
 package com.mrg.mrgmoney.fragments
 
+import android.content.ContentValues.TAG
+import android.icu.text.SimpleDateFormat
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,15 +18,15 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.mrg.mrgmoney.DataBase.Coin
 import com.mrg.mrgmoney.ViewModel.CoinViewModel
 import com.mrg.mrgmoney.databinding.FragmentGraphBinding
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import kotlin.collections.ArrayList
 
 class GraphFragment : Fragment() {
   private lateinit var binding: FragmentGraphBinding
   private lateinit var coinViewModel: CoinViewModel
-//  private val data = ArrayList<ILineDataSet>()
-  private  val chartGain =  ArrayList<Int>()
-  private  val chartSpend = ArrayList<Int>()
-//  private lateinit var arrayGain :Array<AASeriesElement>()
+  private  val chartGain =  ArrayList<Array<Int>>()
+  private  val chartSpend = ArrayList<Array<Int>>()
   private lateinit var aaChartModel : AAChartModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +49,7 @@ class GraphFragment : Fragment() {
             .get(CoinViewModel::class.java)
 
         coinViewModel.allCoins.observe(viewLifecycleOwner , Observer {
-            setData(it)
+            setData(setTestData())
 //            var arrayGian = intArrayOf(chartGain.to)
             aaChartModel = AAChartModel()
                 .chartType(AAChartType.Line)
@@ -57,15 +60,12 @@ class GraphFragment : Fragment() {
                         arrayOf(
                             AASeriesElement()
                                 .name("gain")
-                                .data(arrayOf(chartGain.toArray(), arrayOf(3, 4)))
-//                            arrayOf(
-//                                AASeriesElement()
-//                                    .data(),
-//                                AASeriesElement()
-//                                    .name("spend")
-//                                    .data(chartSpend.toArray())
-//                            ),
-//                            arrayOf(1,2,3,4,5,6,7,8,9,10)
+                                .data(chartGain.toArray())
+                            ,
+                            AASeriesElement()
+                                .name("spend")
+                                .data(chartSpend.toArray())
+
                         )
 
                     )
@@ -82,17 +82,33 @@ class GraphFragment : Fragment() {
     fun setData(list: List<Coin>){
         for (item in list){
             if (item.type == "gain"){
+                chartGain.add(arrayOf(item.date.toString().subSequence(0,2).toString().toInt(),item.amount?.toInt()!!))
+//                chartGain.add()
+                Log.d(TAG, "setData: ${item.date.toString().subSequence(0,2).toString().toInt()}")
 
-                chartGain.add(
-//                        LocalDate.parse(item.date).dayOfMonth.toFloat()?: 0F,
-                    item.amount?.toInt()!!
-                )
             }else if(item.type == "spend"){
-                chartSpend.add(
-                    item.amount?.toInt()!!
-                )
+                chartSpend.add(arrayOf(item.date.toString().subSequence(0,2).toString().toInt(),item.amount?.toInt()!!))
+                Log.d(TAG, "setData: ${item.date.toString().subSequence(0,2).toString().toInt()}")
             }
         }
 
+    }
+
+    fun setTestData():List<Coin>{
+        val  list = listOf<Coin>(
+            Coin(0,"10","gain",50,0),
+            Coin(0,"11","gain",150,0),
+            Coin(0,"12","gain",20,0),
+            Coin(0,"13","gain",30,0),
+            Coin(0,"14","gain",10,0),
+            Coin(0,"15","gain",200,0),
+            Coin(0,"10","spend",50,0),
+            Coin(0,"11","spend",70,0),
+            Coin(0,"12","spend",20,0),
+            Coin(0,"13","spend",10,0),
+            Coin(0,"14","spend",25,0),
+            Coin(0,"15","spend",30,0),
+        )
+        return list
     }
 }

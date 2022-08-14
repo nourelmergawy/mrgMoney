@@ -87,7 +87,7 @@ class CoinViewModel (application: Application) : AndroidViewModel(application) {
     }
     @RequiresApi(Build.VERSION_CODES.N)
     fun getDate():String{
-        val simpleDate = SimpleDateFormat("dd/M/ hh:mm a")
+        val simpleDate = SimpleDateFormat("dd/M hh:mm a")
         val currentDate = simpleDate.format(Date())
         return currentDate
     }

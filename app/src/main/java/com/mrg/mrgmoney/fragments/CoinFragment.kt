@@ -81,7 +81,7 @@ class CoinFragment : Fragment() , CoinListAdapter.DeleteInterface {
                 val adapter = CoinListAdapter(data,this)
                 // Setting the Adapter with the recyclerview
                 binding.recyclerview.adapter = adapter
-                adapter.updateList(it)
+                adapter.updateList(setTestData())
             }
         })
 
@@ -109,5 +109,22 @@ class CoinFragment : Fragment() , CoinListAdapter.DeleteInterface {
     override fun onDelete(coin: Coin) {
         coinViewModel.deleteCoin(coin)
         Toast.makeText(activity?.applicationContext!!,"Coin deleted successfully", Toast.LENGTH_LONG).show()
+    }
+    fun setTestData():List<Coin>{
+        val  list = listOf<Coin>(
+            Coin(0,"10","gain",50,0),
+            Coin(0,"11","gain",150,0),
+            Coin(0,"12","gain",20,0),
+            Coin(0,"13","gain",30,0),
+            Coin(0,"14","gain",10,0),
+            Coin(0,"15","gain",200,0),
+            Coin(0,"10","spend",50,0),
+            Coin(0,"11","spend",70,0),
+            Coin(0,"12","spend",20,0),
+            Coin(0,"13","spend",10,0),
+            Coin(0,"14","spend",25,0),
+            Coin(0,"15","spend",30,0),
+        )
+        return list
     }
 }
