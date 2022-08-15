@@ -49,7 +49,7 @@ class GraphFragment : Fragment() {
             .get(CoinViewModel::class.java)
 
         coinViewModel.allCoins.observe(viewLifecycleOwner , Observer {
-            setData(setTestData())
+            setData(it)
 //            var arrayGian = intArrayOf(chartGain.to)
             aaChartModel = AAChartModel()
                 .chartType(AAChartType.Line)
@@ -71,6 +71,8 @@ class GraphFragment : Fragment() {
                     )
             //The chart view object calls the instance object of AAChartModel and draws the final graphic
             aaChartView.aa_drawChartWithChartModel(aaChartModel)
+            aaChartView.aa_refreshChartWithChartModel(aaChartModel)
+
         })
 
         //Only refresh the chart series data

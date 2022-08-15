@@ -19,5 +19,8 @@ class CoinRepository(private val coinDao: CoinDao) {
         coinDao?.delete(coin)
     }
 
+    suspend fun updateById(amount : Int ,id :Int){
+        coinDao.updateById(amount,id)
+    }
 
 }

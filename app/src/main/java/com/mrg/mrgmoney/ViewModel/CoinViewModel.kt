@@ -37,6 +37,8 @@ class CoinViewModel (application: Application) : AndroidViewModel(application) {
     }
     fun deleteCoin(coin: Coin) {
         viewModelScope.launch(Dispatchers.IO) {
+//           var total = allCoins.value?.get(0)?.total?.plus(coin.amount!!)
+//            updateById(total!!,allCoins.value?.get(0)?.uid!!)
             coinRepository.deleteCoin(coin)
         }
     }
@@ -46,14 +48,28 @@ class CoinViewModel (application: Application) : AndroidViewModel(application) {
         if (allCoins.value?.lastIndex == -1 ){
             return -1
         }else {
-            var index = allCoins.value?.lastIndex
-            total = allCoins.value?.get(index!!)?.total
-            if (total != null) {
+//            var index = allCoins.value?.lastIndex
+            total = allCoins.value?.get(0)?.total?.toInt()
+            if (total != 0) {
+                if (type == "gain") {
+                    total = total?.plus(amount)
+                    Log.d(TAG, "getTotal: ${total}")
+                    return total
+                } else if (type == "spend") {
+                    total = total?.minus(amount)
+                    Log.d(TAG, "getTotal: ${total}")
+
+                    return total
+                }
+            }else{
                 if (type == "gain") {
                     total += amount
+                    Log.d(TAG, "getTotal: ${total}")
                     return total
                 } else if (type == "spend") {
                     total -= amount
+                    Log.d(TAG, "getTotal: ${total}")
+
                     return total
                 }
             }
@@ -76,7 +92,7 @@ class CoinViewModel (application: Application) : AndroidViewModel(application) {
                 }
                 Log.d(TAG, "insertDataToDataBase: date = ${ LocalDateTime.now()}")
 
-            }else{
+            }else if (getTotal(type,amount)!! >= 0){
               addCoin(Coin(0, getDate(),type,amount,getTotal(type,amount)))
             }
             Toast.makeText(context,"successfully",Toast.LENGTH_SHORT)
@@ -90,5 +106,10 @@ class CoinViewModel (application: Application) : AndroidViewModel(application) {
         val simpleDate = SimpleDateFormat("dd/M hh:mm a")
         val currentDate = simpleDate.format(Date())
         return currentDate
+    }
+    fun updateById(amount: Int,id :Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            coinRepository.updateById(amount,id)
+        }
     }
 }

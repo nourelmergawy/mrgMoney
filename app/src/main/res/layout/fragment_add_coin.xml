@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".AddCoinFragment">
+
+    <EditText
+        android:id="@+id/add_money"
+        android:layout_width="212dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="244dp"
+        android:background="@color/white"
+        android:ems="10"
+        android:hint="add money"
+        android:inputType="number"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/spend_btn"
+        android:layout_width="120dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="67dp"
+        android:backgroundTint="#E91E1E"
+        android:text="spend"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/gain_btn"
+        app:layout_constraintTop_toBottomOf="@+id/add_money" />
+
+    <Button
+        android:id="@+id/gain_btn"
+        android:layout_width="120dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
+        android:text="gain"
+        app:layout_constraintEnd_toStartOf="@+id/spend_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_money" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

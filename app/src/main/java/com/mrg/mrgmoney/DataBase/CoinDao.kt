@@ -27,4 +27,9 @@ interface CoinDao {
     @Query("DELETE FROM coin")
     suspend fun deleteAll()
 
+    @Update
+    fun update(coin: Coin)
+
+    @Query("UPDATE coin SET total=:amount WHERE uid = :id")
+    fun updateById(amount : Int, id : Int)
 }

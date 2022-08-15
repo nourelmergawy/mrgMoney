@@ -13,10 +13,22 @@
         <action
             android:id="@+id/action_coinFragment_to_graphFragment"
             app:destination="@id/graphFragment" />
+        <action
+            android:id="@+id/action_coinFragment_to_addCoinFragment"
+            app:destination="@id/addCoinFragment" />
     </fragment>
     <fragment
         android:id="@+id/graphFragment"
         android:name="com.mrg.mrgmoney.fragments.GraphFragment"
         android:label="fragment_graph"
         tools:layout="@layout/fragment_graph" />
+    <fragment
+        android:id="@+id/addCoinFragment"
+        android:name="com.mrg.mrgmoney.AddCoinFragment"
+        android:label="fragment_add_coin"
+        tools:layout="@layout/fragment_add_coin" >
+        <action
+            android:id="@+id/action_addCoinFragment_to_coinFragment"
+            app:destination="@id/coinFragment" />
+    </fragment>
 </navigation>

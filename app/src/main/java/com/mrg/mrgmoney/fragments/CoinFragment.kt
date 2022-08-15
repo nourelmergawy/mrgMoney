@@ -16,21 +16,22 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.mrg.mrgmoney.AddCoinFragmentDirections
 import com.mrg.mrgmoney.DataBase.Coin
 import com.mrg.mrgmoney.ViewModel.CoinViewModel
 import com.mrg.mrgmoney.databinding.FragmentCoinBinding
 
 class CoinFragment : Fragment() , CoinListAdapter.DeleteInterface {
     private lateinit var binding: FragmentCoinBinding
-    private lateinit var gainBtn : Button
-    private lateinit var spendBtn : Button
-    private lateinit var addMoney : EditText
+
     private lateinit var tvTotal : TextView
     private lateinit var coinViewModel: CoinViewModel
     private val data = ArrayList<Coin>()
     private lateinit var coinFragment : CoinFragment
-
+    private lateinit var button : FloatingActionButton
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,54 +48,43 @@ class CoinFragment : Fragment() , CoinListAdapter.DeleteInterface {
 
         setViews()
         setRecycler()
-
         coinViewModel = ViewModelProvider(activity?.viewModelStore!!,
             ViewModelProvider.AndroidViewModelFactory
                 .getInstance(activity?.application!!))
                 .get(CoinViewModel::class.java)
 
-        gainBtn.setOnClickListener(View.OnClickListener {
-            var amount = addMoney.text.toString().toInt()
-            coinViewModel.insertDataToDataBase(amount,"gain",activity?.applicationContext!!)
-            addMoney.setText("")
-        })
-
-        spendBtn.setOnClickListener(View.OnClickListener {
-            var amount = addMoney.text.toString().toInt()
-            coinViewModel.insertDataToDataBase(amount,"spend",activity?.applicationContext!!)
-            addMoney.setText("")
-        })
 
         coinViewModel.allCoins.observe(viewLifecycleOwner, Observer { list ->
             list?.let {
-
-                Log.d(TAG, "getTotal-CoinFragment : ${coinViewModel.allCoins.value?.lastIndex}")
-
                 if(coinViewModel.getTotal("gain",0) == -1){
                     tvTotal.setText("0")
-
-                }else{
-                    tvTotal.setText(coinViewModel.getTotal("gain",0).toString())
-
                 }
+                else{
+                    tvTotal.setText(coinViewModel.getTotal("gain",0).toString())
+                }
+
+                Log.d(TAG, "getTotal-CoinFragment : ${coinViewModel.allCoins.value?.lastIndex}")
                 // This will pass the ArrayList to our Adapter
                 val adapter = CoinListAdapter(data,this)
                 // Setting the Adapter with the recyclerview
                 binding.recyclerview.adapter = adapter
-                adapter.updateList(setTestData())
+                adapter.updateList(it)
             }
         })
 
-
+        button.setOnClickListener(View.OnClickListener {
+            val action =
+                CoinFragmentDirections.
+                actionCoinFragmentToAddCoinFragment()
+            view?.findNavController()?.navigate(action)
+        })
         return binding.root
     }
 
     fun setViews(){
         view.apply{
-            gainBtn = binding.gainBtn
-            spendBtn =binding.spendBtn
-            addMoney = binding.addMoney
             tvTotal = binding.totalMoney
+            button =binding.floatingActionButton
         }
     }
 
@@ -107,6 +97,7 @@ class CoinFragment : Fragment() , CoinListAdapter.DeleteInterface {
 
     }
     override fun onDelete(coin: Coin) {
+
         coinViewModel.deleteCoin(coin)
         Toast.makeText(activity?.applicationContext!!,"Coin deleted successfully", Toast.LENGTH_LONG).show()
     }
